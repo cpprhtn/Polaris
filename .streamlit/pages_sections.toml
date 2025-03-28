@@ -1,0 +1,18 @@
+[[section]]
+name = "📊 데이터 탐색 (EDA)"
+expanded = true
+
+[[page]]
+section = "📊 데이터 탐색 (EDA)"
+path = "eda_page.py"
+name = "Exploratory Data Analysis"
+icon = "📈"
+
+[[section]]
+name = "✅ 데이터 품질"
+
+[[page]]
+section = "✅ 데이터 품질"
+path = "data_quality_page.py"
+name = "Data Quality Report"
+icon = "🧪"

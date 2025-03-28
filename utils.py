@@ -8,10 +8,18 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn.ensemble import IsolationForest
 from sklearn.impute import SimpleImputer
-from io import StringIO
+from io import StringIO, BytesIO
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+from PIL import Image
 
+def show_fig_as_image(fig, width_px=800):
+    buf = BytesIO()
+    fig.savefig(buf, format='png', dpi=600, bbox_inches='tight')
+    buf.seek(0)
+    image = Image.open(buf)
+    st.image(image, width=width_px)
+    plt.close(fig)
 
 class PolarisEDA:
     def __init__(self, file):
@@ -106,13 +114,25 @@ class PolarisEDA:
     def visualize_numeric_data(self):
         st.subheader("📊 Numeric Data Distribution")
         st.write("The following histograms represent the distribution of numeric variables in the dataset.")
+
         numeric_cols = [col for col, dtype in zip(self.df.columns, self.df.dtypes) if dtype in [pl.Float64, pl.Int64]]
-        
-        for col in numeric_cols:
-            st.write(f"🔹 **{col}**")
-            fig, ax = plt.subplots(figsize=(4, 3))
-            sns.histplot(self.df[col].to_pandas(), bins=20, kde=True, ax=ax)
-            st.pyplot(fig)
+
+        if not numeric_cols:
+            st.write("⚠️ No numeric columns detected.")
+            return
+
+        # 4열씩 배치
+        cols_per_row = 4
+        for i in range(0, len(numeric_cols), cols_per_row):
+            row_cols = st.columns(cols_per_row)
+            for j, col in enumerate(numeric_cols[i:i+cols_per_row]):
+                with row_cols[j]:
+                    st.markdown(f"**{col}**")
+                    fig, ax = plt.subplots()
+                    sns.histplot(self.df[col].to_pandas(), bins=20, kde=True, ax=ax)
+                    fig.set_size_inches(4, 3)
+                    st.pyplot(fig)
+
             
     def analyze_binary_data(self):
         st.subheader("🔘 Binary Data Analysis")
@@ -159,9 +179,13 @@ class PolarisEDA:
             return
 
         corr_matrix = self.df.select(numeric_cols).to_pandas().corr()
-        fig, ax = plt.subplots(figsize=(4, 3))
-        sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", ax=ax)
-        st.pyplot(fig)
+        fig, ax = plt.subplots()
+        # ax.set_xticklabels(ax.get_xticklabels(), fontsize=6)
+        # ax.set_yticklabels(ax.get_yticklabels(), fontsize=6)
+        sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", ax=ax, annot_kws={"size": 6})
+        fig.set_size_inches(4, 3)
+        # st.pyplot(fig)
+        show_fig_as_image(fig, width_px=800)
         
     def categorical_data_analysis(self):
         st.subheader("🔢 Categorical Data Analysis")
@@ -224,10 +248,11 @@ class PolarisEDA:
         
         st.write("The following bar chart represents the relative importance of each feature in predicting the target variable.")
         
-        fig, ax = plt.subplots(figsize=(4, 3))
+        fig, ax = plt.subplots()
         sns.barplot(x=numeric_cols[:-1], y=importance, ax=ax)
-        ax.set_xticklabels(numeric_cols[:-1], rotation=45)
-        st.pyplot(fig)
+        # ax.set_xticklabels(numeric_cols[:-1], rotation=45)
+        # st.pyplot(fig)
+        show_fig_as_image(fig, width_px=800)
         
         most_important_feature = numeric_cols[np.argmax(importance)]
         least_important_feature = numeric_cols[np.argmin(importance)]
@@ -254,12 +279,13 @@ class PolarisEDA:
         self.df = self.df.with_columns(pl.Series("cluster", kmeans.labels_))
         
         st.write("📊 Cluster Visualization")
-        fig, ax = plt.subplots(figsize=(4, 3))
+        fig, ax = plt.subplots()
         scatter = ax.scatter(X_imputed[:, 0], X_imputed[:, 1], c=kmeans.labels_, cmap='viridis', alpha=0.6)
         ax.set_xlabel(numeric_cols[0])
         ax.set_ylabel(numeric_cols[1])
         plt.colorbar(scatter, label="Cluster")
-        st.pyplot(fig)
+        # st.pyplot(fig)
+        show_fig_as_image(fig, width_px=800)
         
         st.write("### 📌 Cluster Analysis Report")
         st.write("The dataset has been segmented into **3 clusters** using the K-Means algorithm. Each cluster represents a group of similar data points.")
@@ -289,10 +315,11 @@ class PolarisEDA:
         pca = PCA(n_components=2)
         reduced = pca.fit_transform(X_imputed)
         
-        fig, ax = plt.subplots(figsize=(4, 3))
+        fig, ax = plt.subplots()
         ax.scatter(reduced[:, 0], reduced[:, 1], alpha=0.5)
         ax.set_title("PCA Projection")
-        st.pyplot(fig)
+        # st.pyplot(fig)
+        show_fig_as_image(fig, width_px=800)
         
         explained_variance = pca.explained_variance_ratio_ * 100
         st.write(f"- **First Principal Component** explains {explained_variance[0]:.2f}% of the variance.")
