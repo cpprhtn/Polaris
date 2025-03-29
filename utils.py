@@ -180,11 +180,8 @@ class PolarisEDA:
 
         corr_matrix = self.df.select(numeric_cols).to_pandas().corr()
         fig, ax = plt.subplots()
-        # ax.set_xticklabels(ax.get_xticklabels(), fontsize=6)
-        # ax.set_yticklabels(ax.get_yticklabels(), fontsize=6)
         sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", ax=ax, annot_kws={"size": 6})
         fig.set_size_inches(4, 3)
-        # st.pyplot(fig)
         show_fig_as_image(fig, width_px=800)
         
     def categorical_data_analysis(self):
@@ -250,8 +247,6 @@ class PolarisEDA:
         
         fig, ax = plt.subplots()
         sns.barplot(x=numeric_cols[:-1], y=importance, ax=ax)
-        # ax.set_xticklabels(numeric_cols[:-1], rotation=45)
-        # st.pyplot(fig)
         show_fig_as_image(fig, width_px=800)
         
         most_important_feature = numeric_cols[np.argmax(importance)]
@@ -284,7 +279,6 @@ class PolarisEDA:
         ax.set_xlabel(numeric_cols[0])
         ax.set_ylabel(numeric_cols[1])
         plt.colorbar(scatter, label="Cluster")
-        # st.pyplot(fig)
         show_fig_as_image(fig, width_px=800)
         
         st.write("### 📌 Cluster Analysis Report")
@@ -318,7 +312,6 @@ class PolarisEDA:
         fig, ax = plt.subplots()
         ax.scatter(reduced[:, 0], reduced[:, 1], alpha=0.5)
         ax.set_title("PCA Projection")
-        # st.pyplot(fig)
         show_fig_as_image(fig, width_px=800)
         
         explained_variance = pca.explained_variance_ratio_ * 100
