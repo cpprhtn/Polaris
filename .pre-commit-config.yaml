@@ -3,19 +3,22 @@ repos:
     rev: v1.8.0
     hooks:
       - id: mypy
-        args: ["backend"]
+        args: ["--config-file", "mypy.ini"]
+        files: ^backend/
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.3.0
     hooks:
       - id: ruff
-        args: ["backend"]
+        args: ["--config", "ruff.toml"]
+        files: ^backend/
 
-  - repo: https://github.com/pytest-dev/pytest
-    rev: v7.4.0
+  - repo: local
     hooks:
       - id: pytest
-        name: pytest (unit tests)
+        name: Run Pytest
         entry: pytest
         language: system
         types: [python]
+        args: ["--config-file=pytest.ini"]
+        files: ^backend/
