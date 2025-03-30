@@ -17,8 +17,8 @@ repos:
     hooks:
       - id: pytest
         name: Run Pytest
-        entry: pytest
+        entry: bash -c 'source .venv/bin/activate && export PYTHONPATH=$(pwd)/backend && pytest --config-file=pytest.ini'
         language: system
         types: [python]
-        args: ["--config-file=pytest.ini"]
+        args: []
         files: ^backend/

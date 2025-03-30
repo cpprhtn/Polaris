@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List
 
 app = FastAPI()
 
@@ -27,10 +26,15 @@ class Edge(BaseModel):
     target: str
 
 class PipelineData(BaseModel):
-    nodes: List[Node]
-    edges: List[Edge]
+    nodes: list[Node]
+    edges: list[Edge]
 
-def is_cyclic_util(v, visited, rec_stack, graph):
+def is_cyclic_util(
+    v: int, 
+    visited: dict[int, bool], 
+    rec_stack: dict[int, bool], 
+    graph: dict[int, list[int]]
+) -> bool:
     visited[v] = True
     rec_stack[v] = True
 
@@ -44,27 +48,23 @@ def is_cyclic_util(v, visited, rec_stack, graph):
     rec_stack[v] = False
     return False
 
-def check_if_dag(nodes, edges):
-    graph = {node.id: [] for node in nodes}
+def check_if_dag(nodes: list[Node], edges: list[Edge]) -> bool:
+    graph: dict[int, list[int]] = {int(node.id): [] for node in nodes}  # str → int 변환
     for edge in edges:
-        graph[edge.source].append(edge.target)
+        graph[int(edge.source)].append(int(edge.target))  # str → int 변환
 
-    visited = {node.id: False for node in nodes}
-    rec_stack = {node.id: False for node in nodes}
+    visited: dict[int, bool] = {int(node.id): False for node in nodes}  # str → int 변환
+    rec_stack: dict[int, bool] = {int(node.id): False for node in nodes}
 
     for node in nodes:
-        if not visited[node.id]:
-            if is_cyclic_util(node.id, visited, rec_stack, graph):
+        if not visited[int(node.id)]:
+            if is_cyclic_util(int(node.id), visited, rec_stack, graph):
                 return False
 
-    return True
-
-@app.get('/')
-def read_root():
-    return {'Ping': 'Pong'}
+    return True  # 반환값 추가 (mypy 오류 해결)
 
 @app.post('/pipelines/parse')
-def parse_pipeline(pipeline: PipelineData):
+def parse_pipeline(pipeline: PipelineData) -> dict:
     nodes = pipeline.nodes
     edges = pipeline.edges
 

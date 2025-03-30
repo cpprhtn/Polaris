@@ -2,3 +2,4 @@
 correlation_matrix.png
 /backend/__pycache__
 /pages/__pycache__
+/backend/tests/__pycache__
