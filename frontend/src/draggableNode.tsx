@@ -17,24 +17,14 @@ export const DraggableNode: React.FC<DraggableNodeProps> = ({
 }) => {
   const getIcon = (type: string): JSX.Element | null => {
     switch (type) {
-      case "customInput":
+      case "Input":
         return <MdInput />;
       case "Filter":
         return <MdInput />;
-      case "customOutput":
+      case "Output":
         return <LuFileOutput />;
       case "text":
         return <CiText />;
-      case "customnode1":
-        return <BiCustomize />;
-      case "customnode2":
-        return <VscSymbolParameter />;
-      case "customnode3":
-        return <IoMdSettings />;
-      case "customnode4":
-        return <BiAlignMiddle />;
-      case "customnode5":
-        return <BiAtom />;
       default:
         return null;
     }

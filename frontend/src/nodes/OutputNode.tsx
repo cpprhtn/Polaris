@@ -28,7 +28,7 @@ export const OutputNode: React.FC<OutputNodeProps> = ({ id, data }) => {
     {
       type: "target",
       position: Position.Left,
-      id: `${id}-value`, // 데이터 입력 핸들
+      id: `${id}-value`,
     },
   ];
 

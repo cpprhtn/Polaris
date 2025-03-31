@@ -33,12 +33,12 @@ export const FilterNode: React.FC<FilterNodeProps> = ({ id, data }) => {
     {
       type: "target",
       position: Position.Left,
-      id: `${id}-input`, // 입력 핸들
+      id: `${id}-input`,
     },
     {
       type: "source",
       position: Position.Right,
-      id: `${id}-output`, // 출력 핸들
+      id: `${id}-output`,
     },
   ];
 

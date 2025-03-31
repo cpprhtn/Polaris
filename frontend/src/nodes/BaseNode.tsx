@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Handle, Position, useUpdateNodeInternals } from "reactflow";
 import TextareaAutosize from "react-textarea-autosize";
 
-// === 타입 정의 ===
 type InputField = {
   key: string;
   label: string;
@@ -55,7 +54,6 @@ const BaseNode: React.FC<BaseNodeProps> = ({
   useEffect(() => {
     const matches = findHandlePatterns(text);
 
-    // 상태 비교: 값이 진짜 바뀌었을 때만 setState
     setPatternMatches((prevMatches) => {
       const changed =
         matches.length !== prevMatches.length ||
@@ -103,7 +101,7 @@ const BaseNode: React.FC<BaseNodeProps> = ({
       </div>
       <div>
         {inputs
-          .filter((input) => !input.condition || input.condition(data)) // ✅ 조건 렌더링
+          .filter((input) => !input.condition || input.condition(data))
           .map((input) => (
             <label
               key={input.key}

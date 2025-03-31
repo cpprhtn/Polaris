@@ -11,11 +11,6 @@ import { useStore } from "./store";
 import { InputNode } from "./nodes/inputNode";
 import { OutputNode } from "./nodes/OutputNode";
 import { TextNode } from "./nodes/textNode";
-import { CustomNode1 } from "./nodes/CustomNode1";
-import { CustomNode2 } from "./nodes/CustomNode2";
-import { CustomNode3 } from "./nodes/CustomNode3";
-import { CustomNode4 } from "./nodes/CustomNode4";
-import { CustomNode5 } from "./nodes/CustomNode5";
 import { FilterNode } from "./nodes/FilterNode";
 import "reactflow/dist/style.css";
 
@@ -23,15 +18,10 @@ const gridSize = 20;
 const proOptions = { hideAttribution: true };
 
 const nodeTypes = {
-  customInput: InputNode,
-  filter: FilterNode,
-  customOutput: OutputNode,
+  Input: InputNode,
+  Filter: FilterNode,
+  Output: OutputNode,
   text: TextNode,
-  customnode1: CustomNode1,
-  customnode2: CustomNode2,
-  customnode3: CustomNode3,
-  customnode4: CustomNode4,
-  customnode5: CustomNode5,
 };
 
 type NodeType = keyof typeof nodeTypes;
@@ -41,7 +31,6 @@ export const PipelineUI: React.FC = () => {
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
 
-  // ✅ 상태를 개별로 가져와서 무한 루프 방지
   const nodes = useStore((state) => state.nodes);
   const edges = useStore((state) => state.edges);
   const getNodeID = useStore((state) => state.getNodeID);
@@ -135,22 +124,12 @@ export const PipelineUI: React.FC = () => {
           <MiniMap
             nodeColor={(node) => {
               switch (node.type) {
-                case "customInput":
+                case "Input":
                   return "#0041d0";
-                case "customOutput":
+                case "Output":
                   return "#ff0072";
                 case "text":
                   return "#ff8400";
-                case "customnode1":
-                  return "#00b386";
-                case "customnode2":
-                  return "#9e00c5";
-                case "customnode3":
-                  return "#ff7e00";
-                case "customnode4":
-                  return "#b30000";
-                case "customnode5":
-                  return "yellow";
                 default:
                   return "#888";
               }

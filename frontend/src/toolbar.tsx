@@ -21,15 +21,10 @@ export const PipelineToolbar: React.FC = () => {
           marginBottom: "10px",
         }}
       >
-        <DraggableNode type="customInput" label="Input" />
-        <DraggableNode type="filter" label="Filter" />
-        <DraggableNode type="customOutput" label="Output" />
+        <DraggableNode type="Input" label="Input" />
+        <DraggableNode type="Filter" label="Filter" />
+        <DraggableNode type="Output" label="Output" />
         <DraggableNode type="text" label="Text" />
-        <DraggableNode type="customnode1" label="Custom" />
-        <DraggableNode type="customnode2" label="General" />
-        <DraggableNode type="customnode3" label="Setting" />
-        <DraggableNode type="customnode4" label="Attribute" />
-        <DraggableNode type="customnode5" label="Parameter" />
       </div>
     </div>
   );
